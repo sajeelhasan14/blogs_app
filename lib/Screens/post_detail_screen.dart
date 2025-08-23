@@ -5,9 +5,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String title, body;
-  final int likes, dislikes, views;
+  final int likes, dislikes, views, index;
   final List<String> tags;
   const PostDetailScreen({
+    required this.index,
     required this.title,
     required this.body,
     required this.likes,
@@ -107,27 +108,30 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Color(0xffDC2626),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.delete, color: whiteColor),
-                    SizedBox(width: 8),
-                    Text(
-                      "Delete Post",
-                      style: TextStyle(
-                        fontFamily: "Inter",
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: whiteColor,
+              child: InkWell(
+                onTap: () {},
+                child: Container(
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Color(0xffDC2626),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.delete, color: whiteColor),
+                      SizedBox(width: 8),
+                      Text(
+                        "Delete Post",
+                        style: TextStyle(
+                          fontFamily: "Inter",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: whiteColor,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
