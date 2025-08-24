@@ -1,4 +1,4 @@
-import 'package:blogs_app/Widgets/reusable_row.dart';
+import 'package:blogs_app/Widgets/reusable_row_reactions.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

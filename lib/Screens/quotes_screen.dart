@@ -1,51 +1,55 @@
-import 'package:blogs_app/Screens/post_detail_screen.dart';
-import 'package:blogs_app/Services/posts_service.dart';
-import 'package:blogs_app/Widgets/post_card.dart';
+import 'package:blogs_app/Services/quotes_service.dart';
+import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class QuotesScreen extends StatefulWidget {
+  const QuotesScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<QuotesScreen> createState() => _QuotesScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _QuotesScreenState extends State<QuotesScreen> {
   @override
   Widget build(BuildContext context) {
-    PostsService callPosts = PostsService();
+    QuotesService callQuotes = QuotesService();
     return Scaffold(
       backgroundColor: backColor,
       appBar: AppBar(
         backgroundColor: backColor,
         title: Text(
-          "Daily Stories",
+          "Quotes",
           style: TextStyle(
-            fontFamily: "inter",
+            fontFamily: "nter",
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: whiteColor,
           ),
         ),
+        leading: IconButton(
+          onPressed: () {},
+          icon: SvgPicture.asset("assets/quote.svg"),
+        ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: SvgPicture.asset("assets/shuffle.svg"),
+            icon: Image.asset("assets/love_button.png"),
           ),
           IconButton(
             onPressed: () {},
-            icon: SvgPicture.asset("assets/search.svg"),
+            icon: Image.asset("assets/search_button.png"),
           ),
+          SizedBox(width: 10),
         ],
       ),
       body: Column(
         children: [
           Expanded(
             child: FutureBuilder(
-              future: callPosts.getPosts(),
+              future: callQuotes.getQuotes(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Expanded(
@@ -62,12 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
-                if (!snapshot.hasData || snapshot.data!.posts == null) {
+                if (!snapshot.hasData || snapshot.data!.quotes == null) {
                   return const Center(
                     child: Text(
                       "No posts found",
                       style: TextStyle(
-                        fontFamily: "inter",
+                        fontFamily: "Inter",
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: whiteColor,
@@ -75,36 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 } else {
-                  final posts = snapshot.data!.posts!;
+                  final quotes = snapshot.data!.quotes!;
                   return ListView.builder(
-                    itemCount: snapshot.data!.posts!.length,
+                    itemCount: quotes.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PostDetailScreen(
-                                  index: index,
-                                  title: posts[index].title!,
-                                  body: posts[index].body!,
-                                  likes: posts[index].reactions!.likes!,
-                                  dislikes: posts[index].reactions!.dislikes!,
-                                  views: posts[index].views!,
-                                  tags: posts[index].tags!,
-                                ),
-                              ),
-                            );
-                          },
-                          child: PostCard(
-                            title: posts[index].title!,
-                            body: posts[index].body!,
-                            likes: posts[index].reactions!.likes!,
-                            dislikes: posts[index].reactions!.dislikes!,
-                            views: posts[index].views!,
-                            tags: posts[index].tags!,
+                          onTap: () {},
+                          child: QuoteCard(
+                            quote: quotes[index].quote.toString(),
+                            author: quotes[index].author.toString(),
                           ),
                         ),
                       );
