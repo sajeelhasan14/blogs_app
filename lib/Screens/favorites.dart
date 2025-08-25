@@ -1,5 +1,4 @@
 import 'package:blogs_app/Provider/quote_provider.dart';
-import 'package:blogs_app/Screens/favorites.dart';
 
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
@@ -8,21 +7,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class QuotesScreen extends StatefulWidget {
-  const QuotesScreen({super.key});
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({super.key});
 
   @override
-  State<QuotesScreen> createState() => _QuotesScreenState();
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
-class _QuotesScreenState extends State<QuotesScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // ignore: use_build_context_synchronously
-    Future.microtask(() => context.read<QuoteProvider>().fetchQuotes());
-  }
-
+class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,15 +36,6 @@ class _QuotesScreenState extends State<QuotesScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FavoritesScreen()),
-              );
-            },
-            icon: Image.asset("assets/love_button.png"),
-          ),
-          IconButton(
             onPressed: () {},
             icon: Image.asset("assets/search_button.png"),
           ),
@@ -61,22 +44,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
       ),
       body: Consumer<QuoteProvider>(
         builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return Expanded(
-              flex: 1,
-              child: SpinKitThreeBounce(color: whiteColor),
-            );
-          }
-          if (provider.error != null) {
-            return Center(
-              child: Text(
-                "Error: ${provider.error}",
-                style: TextStyle(color: whiteColor),
-              ),
-            );
-          }
-
-          if (provider.quotes.isEmpty) {
+          if (provider.favorites.isEmpty) {
             return const Center(
               child: Text(
                 "No posts found",
@@ -90,18 +58,16 @@ class _QuotesScreenState extends State<QuotesScreen> {
             );
           } else {
             return ListView.builder(
-              itemCount: provider.quotes.length,
+              itemCount: provider.favorites.length,
               itemBuilder: (context, index) {
-                final quotes = provider.quotes[index];
+                final favor = provider.favorites[index];
                 return Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: GestureDetector(
-                    onTap: () {
-                      provider.addFavorite(quotes);
-                    },
+                    onTap: () {},
                     child: QuoteCard(
-                      quote: quotes.quote.toString(),
-                      author: quotes.author.toString(),
+                      quote: favor.quote.toString(),
+                      author: favor.author.toString(),
                     ),
                   ),
                 );

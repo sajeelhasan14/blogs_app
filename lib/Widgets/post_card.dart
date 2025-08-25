@@ -1,12 +1,15 @@
+import 'package:blogs_app/Provider/post_provider.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PostCard extends StatelessWidget {
   final String title, body;
-  final int likes, dislikes, views;
+  final int likes, dislikes, views, index;
   final List<String> tags;
 
   const PostCard({
+    required this.index,
     required this.title,
     required this.body,
     required this.likes,
@@ -40,7 +43,12 @@ class PostCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<PostProvider>(
+                    context,
+                    listen: false,
+                  ).deletePost(index);
+                },
                 icon: Icon(Icons.delete, color: whiteColor),
               ),
             ],

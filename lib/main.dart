@@ -1,4 +1,7 @@
 import 'package:blogs_app/Provider/navigationbar_provider.dart';
+import 'package:blogs_app/Provider/post_provider.dart';
+import 'package:blogs_app/Provider/quote_provider.dart';
+import 'package:blogs_app/Provider/user_provider.dart';
 import 'package:blogs_app/Screens/home_screen.dart';
 import 'package:blogs_app/Screens/quotes_screen.dart';
 import 'package:blogs_app/Screens/splash_screen.dart';
@@ -8,7 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const BlogApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PostProvider()),
+        ChangeNotifierProvider(create: (context) => QuoteProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => NavigationbarProvider()),
+      ],
+      child: const BlogApp(),
+    ),
+  );
 }
 
 class BlogApp extends StatelessWidget {
@@ -16,12 +29,6 @@ class BlogApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => NavigationbarProvider(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: UserProfileScreen(),
-      ),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: MyApp());
   }
 }

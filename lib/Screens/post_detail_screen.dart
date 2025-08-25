@@ -1,7 +1,9 @@
+import 'package:blogs_app/Provider/post_provider.dart';
 import 'package:blogs_app/Widgets/reusable_row_reactions.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String title, body;
@@ -109,7 +111,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 Navigator.pop(context);
               },
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Provider.of<PostProvider>(
+                    context,
+                    listen: false,
+                  ).deletePost(widget.index);
+                  Navigator.pop(context);
+                },
                 child: Container(
                   height: 48,
                   decoration: BoxDecoration(
