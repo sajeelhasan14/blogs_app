@@ -105,8 +105,8 @@ class Users {
     birthDate = json['birthDate'];
     image = json['image'];
     bloodGroup = json['bloodGroup'];
-    height = json['height'];
-    weight = json['weight'];
+    height = (json['height'] as num?)?.toDouble();
+    weight = (json['weight'] as num?)?.toDouble();
     eyeColor = json['eyeColor'];
     hair = json['hair'] != null ? Hair.fromJson(json['hair']) : null;
     ip = json['ip'];

@@ -1,6 +1,5 @@
 import 'package:blogs_app/Provider/quote_provider.dart';
 import 'package:blogs_app/Screens/favorites.dart';
-
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
@@ -29,18 +28,45 @@ class _QuotesScreenState extends State<QuotesScreen> {
       backgroundColor: backColor,
       appBar: AppBar(
         backgroundColor: backColor,
-        title: Text(
-          "Quotes",
-          style: TextStyle(
-            fontFamily: "Inter",
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: whiteColor,
-          ),
-        ),
+
+        title: Provider.of<QuoteProvider>(context).isSearching
+            ? TextField(
+                style: TextStyle(
+                  fontFamily: "Inter",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: whiteColor,
+                ),
+                decoration: InputDecoration(
+                  hintText: "Search quotes...",
+                  hintStyle: TextStyle(
+                    fontFamily: "Inter",
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: whiteColor,
+                  ),
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  context.read<QuoteProvider>().updateSearchQuery(value);
+                },
+              )
+            : Text(
+                "Quotes",
+                style: TextStyle(
+                  fontFamily: "Inter",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: whiteColor,
+                ),
+              ),
         leading: IconButton(
           onPressed: () {},
-          icon: SvgPicture.asset("assets/quote.svg"),
+          icon: SvgPicture.asset(
+            "assets/blue_quote.svg",
+            height: 15,
+            width: 21,
+          ),
         ),
         actions: [
           IconButton(
@@ -53,7 +79,9 @@ class _QuotesScreenState extends State<QuotesScreen> {
             icon: Image.asset("assets/love_button.png"),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.read<QuoteProvider>().toggleSearching();
+            },
             icon: Image.asset("assets/search_button.png"),
           ),
           SizedBox(width: 10),
@@ -66,20 +94,17 @@ class _QuotesScreenState extends State<QuotesScreen> {
               flex: 1,
               child: SpinKitThreeBounce(color: whiteColor),
             );
-          }
-          if (provider.error != null) {
+          } else if (provider.error != null) {
             return Center(
               child: Text(
                 "Error: ${provider.error}",
                 style: TextStyle(color: whiteColor),
               ),
             );
-          }
-
-          if (provider.quotes.isEmpty) {
+          } else if (provider.quotes.isEmpty) {
             return const Center(
               child: Text(
-                "No posts found",
+                "No quotes found",
                 style: TextStyle(
                   fontFamily: "Inter",
                   fontSize: 20,
@@ -90,9 +115,9 @@ class _QuotesScreenState extends State<QuotesScreen> {
             );
           } else {
             return ListView.builder(
-              itemCount: provider.quotes.length,
+              itemCount: provider.searchQuotes.length,
               itemBuilder: (context, index) {
-                final quotes = provider.quotes[index];
+                final quotes = provider.searchQuotes[index];
                 return Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: GestureDetector(
@@ -100,6 +125,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
                       provider.addFavorite(quotes);
                     },
                     child: QuoteCard(
+                      index: index,
                       quote: quotes.quote.toString(),
                       author: quotes.author.toString(),
                     ),

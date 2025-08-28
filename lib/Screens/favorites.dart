@@ -3,7 +3,7 @@ import 'package:blogs_app/Provider/quote_provider.dart';
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -66,6 +66,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   child: GestureDetector(
                     onTap: () {},
                     child: QuoteCard(
+                      index: index,
                       quote: favor.quote.toString(),
                       author: favor.author.toString(),
                     ),

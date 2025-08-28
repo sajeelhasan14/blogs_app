@@ -1,5 +1,6 @@
 import 'package:blogs_app/Provider/post_provider.dart';
 import 'package:blogs_app/Screens/post_detail_screen.dart';
+import 'package:blogs_app/Screens/search_screen.dart';
 
 import 'package:blogs_app/Widgets/post_card.dart';
 import 'package:blogs_app/constants.dart';
@@ -44,7 +45,12 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: SvgPicture.asset("assets/shuffle.svg"),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchScreen()),
+              );
+            },
             icon: SvgPicture.asset("assets/search.svg"),
           ),
         ],
