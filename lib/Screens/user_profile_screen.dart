@@ -1,8 +1,10 @@
 import 'package:blogs_app/Provider/auth_provider.dart';
 import 'package:blogs_app/Provider/user_post_provider.dart';
+import 'package:blogs_app/Screens/login_screen.dart';
 import 'package:blogs_app/Widgets/profile_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -19,15 +21,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     super.initState();
 
     // Fetch user posts once the widget is initialized
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final userPostsProvider = Provider.of<UserPostsProvider>(
-      context,
-      listen: false,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final userPostsProvider = Provider.of<UserPostsProvider>(
+        context,
+        listen: false,
+      );
 
-    if (authProvider.user != null && authProvider.user!.id != null) {
-      userPostsProvider.fetchUserPosts(authProvider.user!.id!);
-    }
+      if (authProvider.user != null && authProvider.user!.id != null) {
+        userPostsProvider.fetchUserPosts(authProvider.user!.id!);
+      }
+    });
   }
 
   @override
@@ -58,13 +62,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             onPressed: () async {
               await authProvider.logout();
               userPostsProvider.clearPosts();
-              Navigator.pushReplacementNamed(context, '/login');
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
             },
           ),
         ],
       ),
-      body: authProvider.isLoading
-          ? const Center(child: CircularProgressIndicator())
+      body: authProvider.authLoading
+          ? const Expanded(
+              flex: 1,
+              child: SpinKitThreeBounce(color: whiteColor),
+            )
           : user == null
           ? const Center(child: Text("No user data available"))
           : SingleChildScrollView(
@@ -105,7 +116,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ReusableColumn(placeHolder: "127", holderName: "Posts"),
+                        ReusableColumn(
+                          placeHolder:
+                              userPostsProvider.userPosts?.total.toString() ??
+                              "127",
+                          holderName: "Posts",
+                        ),
                         ReusableColumn(
                           placeHolder: "2.4K",
                           holderName: "Likes",
@@ -117,7 +133,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   const SizedBox(height: 30),
 
                   userPostsProvider.isLoading
-                      ? const Center(child: CircularProgressIndicator())
+                      ? const SpinKitThreeBounce(color: whiteColor)
                       : userPostsProvider.error != null
                       ? Text(userPostsProvider.error!)
                       : ListView.builder(

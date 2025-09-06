@@ -1,8 +1,10 @@
 import 'dart:async';
-
-import 'package:blogs_app/Screens/home_screen.dart';
+import 'package:blogs_app/Provider/auth_provider.dart';
+import 'package:blogs_app/Screens/login_screen.dart';
+import 'package:blogs_app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,12 +17,33 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 4), () {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkLogin();
+    });
+  }
+
+  Future<void> _checkLogin() async {
+    // Wait for 3 seconds
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await authProvider.loadUserFromStorage(); // ✅ wait for token/user to load
+    if (!mounted) return;
+
+    if (authProvider.user != null) {
+      // ✅ user is available after storage load
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => const MyApp()),
       );
-    });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
   }
 
   @override
@@ -34,7 +57,6 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.35),
             Image(image: AssetImage("assets/logo.png"), height: 80, width: 80),
-
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             Text(
               "Daily Stories",

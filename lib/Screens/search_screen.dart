@@ -1,158 +1,159 @@
-import 'package:blogs_app/Provider/user_post_provider.dart';
+import 'package:blogs_app/Provider/tags_stories_provider.dart';
+import 'package:blogs_app/Widgets/tags_data_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class SearchScreen extends StatefulWidget {
-  final List<Color> myColors = [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.orange,
-    Colors.purple,
-  ];
+class TagPostsScreen extends StatefulWidget {
+  TagPostsScreen({super.key});
 
-  final List<String> myImages = [
-    'images/history.jpeg',
-    'images/history.jpeg',
-    'images/history.jpeg',
-    'images/history.jpeg',
-    'images/history.jpeg',
+  final List<String> tags = [
+    "All Stories",
+    "Life",
+    "Nature",
+    "French",
+    "Love",
+    "Books",
   ];
-
-  SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<TagPostsScreen> createState() => _TagPostsScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _TagPostsScreenState extends State<TagPostsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TagsStoriesProvider>(
+        context,
+        listen: false,
+      ).fetchTagsData("all");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userPostsProvider = Provider.of<UserPostsProvider>(context);
-    final width = MediaQuery.of(context).size.width;
+    final tagProvider = Provider.of<TagsStoriesProvider>(context);
 
     return Scaffold(
       backgroundColor: backColor,
       appBar: AppBar(
-        centerTitle: true,
-        title: Text("Search", style: TextStyle(color: whiteColor)),
         backgroundColor: backColor,
+        centerTitle: true,
+        title: Text(
+          "Search",
+          style: TextStyle(
+            fontFamily: "inter",
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: whiteColor,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back, color: whiteColor),
+        ),
       ),
       body: Column(
         children: [
+          // 🔍 Search bar
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(14.0),
             child: TextField(
-              decoration: InputDecoration(
-                hintText: "Search",
-                hintStyle: TextStyle(color: greyColor),
-                prefixIcon: Icon(Icons.search, color: greyColor),
-                filled: true,
-                fillColor: greyColor,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
+              style: TextStyle(
+                fontFamily: "Inter",
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: greyColor,
               ),
-              style: TextStyle(color: greyColor),
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search),
+                hintText: "Search stories...",
+                hintStyle: TextStyle(
+                  fontFamily: "Inter",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: greyColor,
+                ),
+                border: InputBorder.none,
+              ),
+              onChanged: (value) {
+                context.read<TagsStoriesProvider>().updateSearchQuery(value);
+              },
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: userPostsProvider.userPosts?.posts?.length,
-              itemBuilder: (context, index) {
-                final randomImage = widget
-                    .myImages[index % widget.myImages.length]; // cycle karega
-                final randomColor =
-                    widget.myColors[index % widget.myColors.length];
-                final post = userPostsProvider.userPosts?.posts![index];
-                return Padding(
-                  padding: const EdgeInsets.all(9.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: greyColor,
-                    ),
-                    height: 125,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                            height: 95,
-                            width: 95,
-                            decoration: BoxDecoration(
-                              color: randomColor,
-                              borderRadius: BorderRadius.circular(10.0),
-                              image: DecorationImage(
-                                image: AssetImage(randomImage),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                post!.title ?? " ",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: whiteColor,
-                                  fontSize: width * 0.045,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    height: 25,
-                                    width: 70,
-                                    decoration: BoxDecoration(
-                                      color: randomColor,
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        post.tags![0],
-                                        style: TextStyle(color: whiteColor),
-                                      ),
-                                    ),
-                                  ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(
-                                          Icons.remove_red_eye,
-                                          color: greyColor,
-                                        ),
-                                        Text(
-                                          post.views.toString(),
-                                          style: TextStyle(color: greyColor),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+          // 🔹 Tags Row
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: List.generate(widget.tags.length, (index) {
+              final isSelected = tagProvider.selectedIndex == index;
+
+              return GestureDetector(
+                onTap: () {
+                  tagProvider.setIndex(index);
+                  widget.tags[index].toLowerCase() == 'all stories'
+                      ? tagProvider.fetchTagsData("all")
+                      : tagProvider.fetchTagsData(
+                          widget.tags[index].toLowerCase(),
+                        ); // ✅ fetch specific tag
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Colors.blue : Colors.grey[900],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    widget.tags[index],
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.white70,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
+                ),
+              );
+            }),
+          ),
+          SizedBox(height: 15),
+
+          // 🔹 Posts list
+          Expanded(
+            child: Consumer<TagsStoriesProvider>(
+              builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return const Center(
+                    child: SpinKitThreeBounce(color: whiteColor),
+                  );
+                }
+                if (provider.search.isEmpty) {
+                  return const Center(child: Text("No posts available"));
+                }
+                return ListView.builder(
+                  itemCount: provider.search.length,
+                  itemBuilder: (context, index) {
+                    final post = provider.search[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: TagsDataCard(
+                        title: post.title!,
+                        body: post.body!,
+                        likes: post.reactions!.likes!,
+                        dislikes: post.reactions!.dislikes!,
+                        views: post.views!,
+                      ),
+                    );
+                  },
                 );
               },
             ),

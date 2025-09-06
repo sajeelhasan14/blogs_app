@@ -34,7 +34,16 @@ class QuoteProvider extends ChangeNotifier {
   }
 
   void addFavorite(Quotes quote) {
-    _favorites.add(quote);
+    if (_favorites.contains(quote)) {
+      _favorites.remove(quote);
+    } else {
+      _favorites.add(quote);
+    }
+    notifyListeners();
+  }
+
+  bool isFavorite(Quotes quote) {
+    return _favorites.contains(quote);
   }
 
   // 🎨 Your Figma colors

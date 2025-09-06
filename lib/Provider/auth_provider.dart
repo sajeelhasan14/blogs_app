@@ -15,8 +15,8 @@ class AuthProvider extends ChangeNotifier {
   bool _authLoading = false; // ✅ Only for login/logout
   bool get authLoading => _authLoading;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  // bool _isLoading = false;
+  // bool get isLoading => _isLoading;
 
   String? _error;
   String? get error => _error;
@@ -33,7 +33,16 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     _token = await SessionStorage().getToken();
     if (_token != null) {
-      _user = await _authService.getProfile();
+      try {
+        _user = await _authService.getProfile();
+      } catch (e) {
+        if (e.toString().contains("TokenExpired")) {
+          // clear auth state
+          await SessionStorage().deleteToken();
+          _user = null;
+          _token = null;
+        }
+      }
     }
     _startupLoading = false;
     notifyListeners();
@@ -48,7 +57,10 @@ class AuthProvider extends ChangeNotifier {
       final user = await _authService.login(username, password);
       if (user != null) {
         _user = user;
-        _token = await SessionStorage().getToken();
+        final savedToken = await SessionStorage().getToken();
+        if (savedToken == null) {
+          _token = savedToken;
+        }
       } else {
         _error = "Invalid username or password";
       }

@@ -8,10 +8,12 @@ class QuoteCard extends StatelessWidget {
   final int index;
   final String quote;
   final String author;
+  final bool isFavoriteScreen;
   QuoteCard({
     required this.quote,
     required this.author,
     required this.index,
+    required this.isFavoriteScreen,
     super.key,
   });
   final List<Color> codeColors = [
@@ -26,6 +28,7 @@ class QuoteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorProvider = Provider.of<QuoteProvider>(context, listen: false);
     final color = colorProvider.getColorForQuote(index);
+    final quotes = Provider.of<QuoteProvider>(context);
     return Card(
       color: cardColor,
       child: Column(
@@ -68,14 +71,57 @@ class QuoteCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Image.asset(
-                        "assets/love_button.png",
-                        height: 40,
-                        width: 30,
-                      ),
-                    ),
+                    isFavoriteScreen
+                        ? IconButton(
+                            onPressed: () {},
+                            icon: Stack(
+                              alignment: AlignmentGeometry.directional(0, 0),
+                              children: [
+                                Image.asset(
+                                  "assets/love_button.png",
+                                  color: Color(0xff303843),
+                                  height: 40,
+                                  width: 30,
+                                ),
+                                Icon(
+                                  Icons.favorite,
+                                  color:
+                                      quotes.isFavorite(
+                                        quotes.searchQuotes[index],
+                                      )
+                                      ? Colors.red
+                                      : whiteColor,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              quotes.addFavorite(quotes.searchQuotes[index]);
+                            },
+                            icon: Stack(
+                              alignment: AlignmentGeometry.directional(0, 0),
+                              children: [
+                                Image.asset(
+                                  "assets/love_button.png",
+                                  color: Color(0xff303843),
+                                  height: 40,
+                                  width: 30,
+                                ),
+                                Icon(
+                                  Icons.favorite,
+                                  color:
+                                      quotes.isFavorite(
+                                        quotes.searchQuotes[index],
+                                      )
+                                      ? Colors.red
+                                      : whiteColor,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
                     IconButton(
                       onPressed: () {},
                       icon: Image.asset(

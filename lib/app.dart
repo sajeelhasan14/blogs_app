@@ -1,4 +1,7 @@
+import 'package:blogs_app/Provider/auth_provider.dart';
 import 'package:blogs_app/Provider/navigationbar_provider.dart';
+import 'package:blogs_app/Provider/post_provider.dart';
+import 'package:blogs_app/Provider/quote_provider.dart';
 import 'package:blogs_app/Screens/home_screen.dart';
 import 'package:blogs_app/Screens/quotes_screen.dart';
 import 'package:blogs_app/Screens/user_profile_screen.dart';
@@ -19,6 +22,15 @@ class _MyAppState extends State<MyApp> {
     QuotesScreen(),
     UserProfileScreen(),
   ];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PostProvider>().fetchPosts();
+      context.read<QuoteProvider>().fetchQuotes();
+      context.read<AuthProvider>().loadUserFromStorage();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

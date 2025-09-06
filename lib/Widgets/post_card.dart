@@ -95,15 +95,10 @@ class PostCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Image(
-                      image: AssetImage("assets/thumbsUp.png"),
-                      height: 20,
-                      width: 14,
-                    ),
+                    Icon(Icons.thumb_up_alt, color: Colors.amberAccent),
                     SizedBox(width: 2),
                     Text(
                       likes.toString(),
-
                       style: TextStyle(
                         fontFamily: "Inter",
                         fontSize: 14,
@@ -116,11 +111,7 @@ class PostCard extends StatelessWidget {
 
                 Row(
                   children: [
-                    Image(
-                      image: AssetImage("assets/thumbsDown.png"),
-                      height: 20,
-                      width: 14,
-                    ),
+                    Icon(Icons.thumb_down_alt, color: Colors.amberAccent),
                     SizedBox(width: 2),
                     Text(
                       dislikes.toString(),

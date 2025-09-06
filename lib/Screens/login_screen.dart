@@ -1,6 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:blogs_app/Provider/auth_provider.dart';
 import 'package:blogs_app/Provider/login_provider.dart';
-
 import 'package:blogs_app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:blogs_app/constants.dart';
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
 
-    Future<void> _login() async {
+    Future<void> login() async {
       if (_formKey.currentState!.validate()) {
         await authProvider.login(
           usernameController.text,
@@ -138,8 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: _login,
-                      child: authProvider.isLoading
+                      onPressed: login,
+                      child: authProvider.authLoading
                           ? const CircularProgressIndicator(color: backColor)
                           : Text(
                               "Login",

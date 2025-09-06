@@ -1,7 +1,8 @@
 import 'package:blogs_app/Provider/post_provider.dart';
+import 'package:blogs_app/Provider/quote_provider.dart';
+import 'package:blogs_app/Screens/addpost_screen.dart';
 import 'package:blogs_app/Screens/post_detail_screen.dart';
 import 'package:blogs_app/Screens/search_screen.dart';
-
 import 'package:blogs_app/Widgets/post_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // ignore: use_build_context_synchronously
-    Future.microtask(() => context.read<PostProvider>().fetchPosts());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PostProvider>().fetchPosts();
+      context.read<QuoteProvider>().fetchQuotes();
+    });
   }
 
   @override
@@ -33,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           "Daily Stories",
           style: TextStyle(
-            fontFamily: "inter",
+            fontFamily: "Inter",
             fontSize: 20,
             fontWeight: FontWeight.w600,
             color: whiteColor,
@@ -41,14 +45,19 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: SvgPicture.asset("assets/shuffle.svg"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddpostScreen()),
+              );
+            },
+            icon: Icon(Icons.post_add, color: whiteColor),
           ),
           IconButton(
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchScreen()),
+                MaterialPageRoute(builder: (context) => TagPostsScreen()),
               );
             },
             icon: SvgPicture.asset("assets/search.svg"),
@@ -58,10 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer<PostProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return Expanded(
-              flex: 1,
-              child: SpinKitThreeBounce(color: whiteColor),
-            );
+            return SpinKitThreeBounce(color: whiteColor);
           } else if (provider.error != null) {
             return Center(
               child: Text(

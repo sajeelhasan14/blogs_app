@@ -22,7 +22,7 @@ class ProfileCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(radius: 30, child: Image.network(user.image!)),
+                    CircleAvatar(radius: 25, child: Image.network(user.image!)),
                     SizedBox(width: 12),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,

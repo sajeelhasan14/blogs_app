@@ -1,5 +1,6 @@
 import 'package:blogs_app/Provider/quote_provider.dart';
-import 'package:blogs_app/Screens/favorites.dart';
+import 'package:blogs_app/Screens/favorites_quotes.dart';
+
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,10 @@ class _QuotesScreenState extends State<QuotesScreen> {
   @override
   void initState() {
     super.initState();
-    // ignore: use_build_context_synchronously
-    Future.microtask(() => context.read<QuoteProvider>().fetchQuotes());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<QuoteProvider>().fetchQuotes();
+    });
   }
 
   @override
@@ -31,9 +34,10 @@ class _QuotesScreenState extends State<QuotesScreen> {
 
         title: Provider.of<QuoteProvider>(context).isSearching
             ? TextField(
+                showCursor: false,
                 style: TextStyle(
                   fontFamily: "Inter",
-                  fontSize: 20,
+                  fontSize: 12,
                   fontWeight: FontWeight.w400,
                   color: whiteColor,
                 ),
@@ -41,8 +45,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   hintText: "Search quotes...",
                   hintStyle: TextStyle(
                     fontFamily: "Inter",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                     color: whiteColor,
                   ),
                   border: InputBorder.none,
@@ -76,7 +80,18 @@ class _QuotesScreenState extends State<QuotesScreen> {
                 MaterialPageRoute(builder: (context) => FavoritesScreen()),
               );
             },
-            icon: Image.asset("assets/love_button.png"),
+            icon: Stack(
+              alignment: AlignmentGeometry.directional(0, 0),
+              children: [
+                Image.asset(
+                  "assets/love_button.png",
+                  color: Color(0xff303843),
+                  height: 40,
+                  width: 30,
+                ),
+                Icon(Icons.favorite, color: Colors.red, size: 20),
+              ],
+            ),
           ),
           IconButton(
             onPressed: () {
@@ -128,6 +143,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
                       index: index,
                       quote: quotes.quote.toString(),
                       author: quotes.author.toString(),
+                      isFavoriteScreen: false,
                     ),
                   ),
                 );

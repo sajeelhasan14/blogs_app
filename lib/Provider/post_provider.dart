@@ -1,5 +1,4 @@
 import 'package:blogs_app/Models/post_model.dart';
-
 import 'package:blogs_app/Services/posts_service.dart';
 import 'package:flutter/widgets.dart';
 
@@ -9,7 +8,7 @@ class PostProvider extends ChangeNotifier {
   List<Posts> _posts = List.empty(growable: true);
   List<Posts> get posts => _posts;
 
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
 
   String? _error;
@@ -35,4 +34,5 @@ class PostProvider extends ChangeNotifier {
     _posts.removeAt(index);
     notifyListeners();
   }
+  //  Search Logic
 }

@@ -6,3 +6,4 @@ const cardColor = Color(0xff1A1A1A);
 const greyColor = Color(0xffCCCCCC);
 const quoteColor = Color(0xffF3F4F6);
 const authorColor = Color(0xff9CA3AF);
+const greyfieldColor = Color(0xffE5E7EB);

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:blogs_app/Models/user_model.dart';
 import 'package:blogs_app/Models/user_post_model.dart';
 import 'package:blogs_app/Services/api_service.dart';
@@ -25,7 +24,7 @@ class AuthService {
   }
 
   Future<Users?> getProfile() async {
-    final token = await SessionStorage().getToken(); // ✅ fixed await
+    final token = await SessionStorage().getToken();
     if (token == null) return null;
 
     final url = Uri.parse(ApiService.me);
@@ -35,8 +34,13 @@ class AuthService {
     );
     if (response.statusCode == 200) {
       return Users.fromJson(jsonDecode(response.body));
+    } else if (response.statusCode == 401) {
+      // Token expired or invalid
+      await SessionStorage().deleteToken(); // clear storage
+      throw Exception("TokenExpired"); // custom message
+    } else {
+      throw Exception("Invalid username or password  ${response.statusCode}");
     }
-    return null;
   }
 
   Future<void> logout() async {
@@ -60,11 +64,5 @@ class AuthService {
 
   Future<String?> getToken() async {
     return await SessionStorage().getToken();
-  }
-
-  // Optional: If you want a method to get the token immediately after login
-  Future<String?> getProfileToken() async {
-    final token = await SessionStorage().getToken();
-    return token;
   }
 }

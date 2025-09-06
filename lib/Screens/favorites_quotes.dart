@@ -1,10 +1,8 @@
 import 'package:blogs_app/Provider/quote_provider.dart';
-
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -22,7 +20,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       appBar: AppBar(
         backgroundColor: backColor,
         title: Text(
-          "Quotes",
+          "Favorite Quotes",
           style: TextStyle(
             fontFamily: "Inter",
             fontSize: 20,
@@ -31,16 +29,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           ),
         ),
         leading: IconButton(
-          onPressed: () {},
-          icon: SvgPicture.asset("assets/quote.svg"),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back, color: whiteColor),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset("assets/search_button.png"),
-          ),
-          SizedBox(width: 10),
-        ],
       ),
       body: Consumer<QuoteProvider>(
         builder: (context, provider, child) {
@@ -63,13 +56,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 final favor = provider.favorites[index];
                 return Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: QuoteCard(
-                      index: index,
-                      quote: favor.quote.toString(),
-                      author: favor.author.toString(),
-                    ),
+                  child: QuoteCard(
+                    index: index,
+                    quote: favor.quote.toString(),
+                    author: favor.author.toString(),
+                    isFavoriteScreen: true,
                   ),
                 );
               },
