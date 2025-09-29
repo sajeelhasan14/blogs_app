@@ -2,4 +2,4 @@
 
 A new Flutter project.
 
-![App Screenshot](mockup/screen.jpeg)
+![App Screenshot](mockup/screen.jpg)
