@@ -15,8 +15,8 @@ class PostProvider extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-  Future<void> fetchPosts() async {
-    if (_posts.isNotEmpty) return;
+  Future<void> fetchPosts({bool force = false}) async {
+    if (!force && _posts.isNotEmpty) return;
     _isLoading = true;
     _error = null;
     notifyListeners();
