@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 class PostCard extends StatelessWidget {
   final String title, body;
   final int likes, dislikes, views, index;
+  final int? id;
   final List<String> tags;
 
   const PostCard({
@@ -16,6 +17,8 @@ class PostCard extends StatelessWidget {
     required this.dislikes,
     required this.views,
     required this.tags,
+     this.id,
+
     super.key,
   });
 
@@ -47,7 +50,7 @@ class PostCard extends StatelessWidget {
                   Provider.of<PostProvider>(
                     context,
                     listen: false,
-                  ).deletePost(index);
+                  ).deletePost(index,id: id);
                 },
                 icon: Icon(Icons.delete, color: whiteColor),
               ),

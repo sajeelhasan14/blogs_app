@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "542127441373",
+    "project_id": "firestore-practice-ff608",
+    "storage_bucket": "firestore-practice-ff608.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542127441373:android:84064f4d4abdc22119e234",
+        "android_client_info": {
+          "package_name": "com.example.blogs_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAN3OS7UszR5ZkVDnIMVQZow3pm1956HA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,8 +10,12 @@ import 'package:blogs_app/Provider/login_provider.dart';
 import 'package:blogs_app/Provider/navigationbar_provider.dart';
 import 'package:blogs_app/Provider/post_provider.dart';
 import 'package:blogs_app/Provider/quote_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
       providers: [

@@ -2,6 +2,7 @@ import 'package:blogs_app/Provider/tag_creator_provider.dart';
 import 'package:blogs_app/Services/addpost_service.dart';
 import 'package:blogs_app/Widgets/field_name.dart';
 import 'package:blogs_app/Widgets/reusable_textfields.dart';
+import 'package:blogs_app/Provider/post_provider.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -212,11 +213,13 @@ class _AddpostScreenState extends State<AddpostScreen> {
                       return; // 👈 stop execution here
                     }
 
-                    final messenger = ScaffoldMessenger.of(context);
-                    final success = await AddpostService().addPost(title, body);
+                    final success = await AddpostService().addPostFirestore(
+                      title,
+                      body,
+                    );
 
                     if (!mounted) return;
-                    messenger.showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
                           success
@@ -228,6 +231,7 @@ class _AddpostScreenState extends State<AddpostScreen> {
                     );
 
                     if (success && mounted) {
+                      await context.read<PostProvider>().fetchPosts();
                       Navigator.pop(context);
                     }
                   },

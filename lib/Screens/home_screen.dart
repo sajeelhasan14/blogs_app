@@ -109,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: PostCard(
                       index: index,
+                      id: post.id,
                       title: post.title ?? "",
                       body: post.body ?? "",
                       likes: post.reactions?.likes ?? 0,
