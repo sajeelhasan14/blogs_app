@@ -9,6 +9,9 @@ class PostProvider extends ChangeNotifier {
   List<Posts> _posts = List.empty(growable: true);
   List<Posts> get posts => _posts;
 
+  List<Posts> _firebasePosts = List.empty(growable: true);
+  List<Posts> get firebasePosts => _firebasePosts;
+
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
@@ -38,6 +41,7 @@ class PostProvider extends ChangeNotifier {
         );
       }).toList();
       _posts = [...firebasePosts, ...apiPosts];
+      _firebasePosts = [...firebasePosts];
       notifyListeners();
     } catch (e) {
       _error = e.toString();

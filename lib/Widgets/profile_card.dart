@@ -5,9 +5,11 @@ import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCard extends StatelessWidget {
-  final Posts post;
+  final String  body;
+  
+  final int index;
   final Users user;
-  const ProfileCard({required this.post, required this.user, super.key});
+  const ProfileCard({required this.body, required this.user,required this.index, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class ProfileCard extends StatelessWidget {
             ),
             SizedBox(height: 15),
             Text(
-              post.body.toString(),
+              body.toString(),
               style: TextStyle(
                 fontFamily: "Inter",
                 fontSize: 14,

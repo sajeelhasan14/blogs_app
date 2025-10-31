@@ -1,4 +1,5 @@
 import 'package:blogs_app/Provider/auth_provider.dart';
+import 'package:blogs_app/Provider/post_provider.dart';
 import 'package:blogs_app/Provider/user_post_provider.dart';
 import 'package:blogs_app/Screens/login_screen.dart';
 import 'package:blogs_app/Widgets/profile_card.dart';
@@ -23,13 +24,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     // Fetch user posts once the widget is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      context.read<PostProvider>().fetchPosts();
+
       final userPostsProvider = Provider.of<UserPostsProvider>(
         context,
         listen: false,
       );
+      final firebasePosts = Provider.of<PostProvider>(context, listen: false);
 
       if (authProvider.user != null && authProvider.user!.id != null) {
         userPostsProvider.fetchUserPosts(authProvider.user!.id!);
+        firebasePosts.fetchPosts();
       }
     });
   }
@@ -38,6 +43,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     final userPostsProvider = Provider.of<UserPostsProvider>(context);
+    final firebasePosts = Provider.of<PostProvider>(context, listen: false);
 
     final user = authProvider.user;
 
@@ -117,9 +123,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ReusableColumn(
-                          placeHolder:
-                              userPostsProvider.userPosts?.total.toString() ??
-                              "127",
+                          placeHolder: firebasePosts.firebasePosts.length
+                              .toString(),
+
                           holderName: "Posts",
                         ),
                         ReusableColumn(
@@ -140,11 +146,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount:
-                              userPostsProvider.userPosts?.posts?.length ?? 0,
+                              firebasePosts.firebasePosts.length,
                           itemBuilder: (context, index) {
                             final post =
-                                userPostsProvider.userPosts!.posts![index];
-                            return ProfileCard(post: post, user: user);
+                                firebasePosts.firebasePosts[index];
+                            return ProfileCard(body: post.body?? 'something might wrong', user: user,index: index,);
                           },
                         ),
                 ],
