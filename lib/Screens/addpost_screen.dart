@@ -231,7 +231,9 @@ class _AddpostScreenState extends State<AddpostScreen> {
                     );
 
                     if (success && mounted) {
-                      await context.read<PostProvider>().fetchPosts();
+                      await context.read<PostProvider>().fetchPosts(
+                        force: true,
+                      );
                       Navigator.pop(context);
                     }
                   },
