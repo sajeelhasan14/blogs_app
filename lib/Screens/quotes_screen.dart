@@ -1,5 +1,6 @@
 import 'package:blogs_app/Provider/quote_provider.dart';
 import 'package:blogs_app/Screens/favorites_quotes.dart';
+import 'package:blogs_app/Services/firebase_favorites.dart';
 
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
@@ -137,7 +138,10 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   padding: const EdgeInsets.all(15.0),
                   child: GestureDetector(
                     onTap: () {
-                      provider.addFavorite(quotes);
+                      FirebaseFavorites().addFavoriteToFirestore(
+                        quotes.author ?? 'N/A',
+                        quotes.quote ?? "N/A",
+                      );
                     },
                     child: QuoteCard(
                       index: index,

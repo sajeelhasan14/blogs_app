@@ -2,7 +2,6 @@ import 'package:blogs_app/Provider/quote_provider.dart';
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 
 class FavoritesScreen extends StatefulWidget {
