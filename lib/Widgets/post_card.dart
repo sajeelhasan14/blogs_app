@@ -17,7 +17,7 @@ class PostCard extends StatelessWidget {
     required this.dislikes,
     required this.views,
     required this.tags,
-     this.id,
+    this.id,
 
     super.key,
   });
@@ -46,11 +46,12 @@ class PostCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {
+                onPressed: () async {
                   Provider.of<PostProvider>(
                     context,
                     listen: false,
-                  ).deletePost(index,id: id);
+                  ).deletePost(index, id: id);
+                  await context.read<PostProvider>().fetchPosts(force: true);
                 },
                 icon: Icon(Icons.delete, color: whiteColor),
               ),

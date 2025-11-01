@@ -33,7 +33,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       final firebasePosts = Provider.of<PostProvider>(context, listen: false);
 
       if (authProvider.user != null && authProvider.user!.id != null) {
-        userPostsProvider.fetchUserPosts(authProvider.user!.id!);
+        
         firebasePosts.fetchPosts();
       }
     });

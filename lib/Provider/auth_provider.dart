@@ -57,6 +57,7 @@ class AuthProvider extends ChangeNotifier {
       final user = await _authService.login(username, password);
       if (user != null) {
         _user = user;
+        print(user.id);
         final savedToken = await SessionStorage().getToken();
         if (savedToken == null) {
           _token = savedToken;

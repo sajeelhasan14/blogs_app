@@ -1,6 +1,4 @@
 import 'package:blogs_app/Models/user_model.dart';
-import 'package:blogs_app/Models/user_post_model.dart';
-
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
 
