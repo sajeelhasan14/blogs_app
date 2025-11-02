@@ -1,5 +1,6 @@
 import 'package:blogs_app/Models/quote_model.dart';
 import 'package:blogs_app/Services/quotes_service.dart';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -99,4 +100,6 @@ class QuoteProvider extends ChangeNotifier {
     _isSearching = !_isSearching;
     notifyListeners();
   }
+
+  
 }

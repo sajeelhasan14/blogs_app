@@ -1,4 +1,5 @@
 import 'package:blogs_app/Provider/quote_provider.dart';
+import 'package:blogs_app/Services/firebase_favorites.dart';
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,15 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<FirebaseFavorites>().fetchFavoriteQuotes();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +44,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           icon: Icon(Icons.arrow_back, color: whiteColor),
         ),
       ),
-      body: Consumer<QuoteProvider>(
+      body: Consumer<FirebaseFavorites>(
         builder: (context, provider, child) {
-          if (provider.favorites.isEmpty) {
+          if (provider.favoriteQuotes.isEmpty) {
             return const Center(
               child: Text(
                 "No posts found",
@@ -50,9 +60,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             );
           } else {
             return ListView.builder(
-              itemCount: provider.favorites.length,
+              itemCount: provider.favoriteQuotes.length,
               itemBuilder: (context, index) {
-                final favor = provider.favorites[index];
+                final favor = provider.favoriteQuotes[index];
                 return Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: QuoteCard(

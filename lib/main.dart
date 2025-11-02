@@ -3,6 +3,7 @@ import 'package:blogs_app/Provider/tag_creator_provider.dart';
 import 'package:blogs_app/Provider/tags_stories_provider.dart';
 import 'package:blogs_app/Provider/user_post_provider.dart';
 import 'package:blogs_app/Screens/splash_screen.dart';
+import 'package:blogs_app/Services/firebase_favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:blogs_app/Provider/auth_provider.dart';
@@ -28,6 +29,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => TagsStoriesProvider()),
         ChangeNotifierProvider(create: (context) => TagCreatorProvider()),
         ChangeNotifierProvider(create: (context) => FavoriteProvider()),
+        ChangeNotifierProvider(create: (context) => FirebaseFavorites()),
       ],
       child: const BlogApp(),
     ),

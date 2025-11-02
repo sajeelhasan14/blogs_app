@@ -139,8 +139,8 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   child: GestureDetector(
                     onTap: () {
                       FirebaseFavorites().addFavoriteToFirestore(
-                        quotes.author ?? 'N/A',
-                        quotes.quote ?? "N/A",
+                        quotes.quote.toString(),
+                        quotes.author.toString(),
                       );
                     },
                     child: QuoteCard(
