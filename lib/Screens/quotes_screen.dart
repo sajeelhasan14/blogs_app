@@ -28,6 +28,7 @@ class _QuotesScreenState extends State<QuotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final favquotes = Provider.of<FirebaseFavorites>(context);
     return Scaffold(
       backgroundColor: backColor,
       appBar: AppBar(
@@ -138,16 +139,23 @@ class _QuotesScreenState extends State<QuotesScreen> {
                   padding: const EdgeInsets.all(15.0),
                   child: GestureDetector(
                     onTap: () {
-                      FirebaseFavorites().addFavoriteToFirestore(
-                        quotes.quote.toString(),
-                        quotes.author.toString(),
-                      );
+                      favquotes.isFavorite(
+                            quotes.author.toString(),
+                            quotes.quote.toString(),
+                          )
+                          ? favquotes.deleteFavorite(
+                              quotes.author.toString(),
+                              quotes.quote.toString(),
+                            )
+                          : favquotes.addFavoriteToFirestore(
+                              quotes.quote.toString(),
+                              quotes.author.toString(),
+                            );
                     },
                     child: QuoteCard(
                       index: index,
                       quote: quotes.quote.toString(),
                       author: quotes.author.toString(),
-                      isFavoriteScreen: false,
                     ),
                   ),
                 );

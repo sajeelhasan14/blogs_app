@@ -1,4 +1,3 @@
-import 'package:blogs_app/Provider/quote_provider.dart';
 import 'package:blogs_app/Services/firebase_favorites.dart';
 import 'package:blogs_app/Widgets/quote_card.dart';
 import 'package:blogs_app/constants.dart';
@@ -69,7 +68,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     index: index,
                     quote: favor.quote.toString(),
                     author: favor.author.toString(),
-                    isFavoriteScreen: true,
+                    
                   ),
                 );
               },

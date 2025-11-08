@@ -18,43 +18,68 @@ class PostProvider extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
+  PostProvider() {
+    _listenToFirebasePosts(); // Start real-time listener on initialization
+  }
+
+  void _listenToFirebasePosts() {
+    FirebaseFirestore.instance
+        .collection("posts")
+        .snapshots()
+        .listen(
+          (snapshot) async {
+            // Convert Firestore docs to Posts
+            _firebasePosts = snapshot.docs.map((doc) {
+              final data = doc.data();
+              return Posts(
+                id: int.tryParse(data['id'] ?? ''),
+                title: data['title'] ?? '',
+                body: data['body'] ?? '',
+              );
+            }).toList();
+
+            // Merge with API posts
+            final response = await _postsService.getPosts();
+            final apiPosts = response.posts ?? [];
+            _posts = [..._firebasePosts, ...apiPosts];
+
+            _isLoading = false;
+            notifyListeners(); // UI updates automatically
+          },
+          onError: (e) {
+            _error = e.toString();
+            _isLoading = false;
+            notifyListeners();
+          },
+        );
+  }
+
   Future<void> fetchPosts({bool force = false}) async {
     if (!force && _posts.isNotEmpty) return;
+
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      _posts.clear();
       final response = await _postsService.getPosts();
       final apiPosts = response.posts ?? [];
-
-      final firestoreSnapshot = await FirebaseFirestore.instance
-          .collection("posts")
-          .get();
-      final firebasePosts = firestoreSnapshot.docs.map((doc) {
-        final data = doc.data();
-        return Posts(
-          id: int.tryParse(data['id'] ?? ''),
-          title: data['title'] ?? '',
-          body: data['body'] ?? '',
-        );
-      }).toList();
-      _posts = [...firebasePosts, ...apiPosts];
-      _firebasePosts = [...firebasePosts];
-      notifyListeners();
+      _posts = [..._firebasePosts, ...apiPosts];
     } catch (e) {
       _error = e.toString();
     }
+
     _isLoading = false;
     notifyListeners();
   }
 
   void deletePost(int index, {int? id}) async {
-    _posts.removeAt(index);
-    notifyListeners();
+    if (index >= 0 && index < _posts.length) {
+      _posts.removeAt(index);
+      notifyListeners();
+    }
+
     try {
-      // Delete from Firestore
       if (id != null) {
         await FirebaseFirestore.instance
             .collection('posts')
@@ -65,6 +90,4 @@ class PostProvider extends ChangeNotifier {
       // Handle error if needed
     }
   }
-
-  
 }

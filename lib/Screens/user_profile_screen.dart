@@ -25,11 +25,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       context.read<PostProvider>().fetchPosts();
-
-      final userPostsProvider = Provider.of<UserPostsProvider>(
-        context,
-        listen: false,
-      );
       final firebasePosts = Provider.of<PostProvider>(context, listen: false);
 
       if (authProvider.user != null && authProvider.user!.id != null) {
